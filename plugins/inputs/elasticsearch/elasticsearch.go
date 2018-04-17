@@ -91,6 +91,9 @@ const sampleConfig = `
   # servers = ["http://user:pass@localhost:9200"]
   servers = ["http://localhost:9200"]
 
+  ## HTTP headers to send with each request
+  http_headers = { "X-Custom-Header" = "Custom" }
+
   ## Timeout for HTTP requests to the elastic search server(s)
   http_timeout = "5s"
 
@@ -152,6 +155,7 @@ type Elasticsearch struct {
 	NodeStats                  []string          `toml:"node_stats"`
 	Username                   string            `toml:"username"`
 	Password                   string            `toml:"password"`
+	HttpHeaders                map[string]string
 	tls.ClientConfig
 
 	client          *http.Client
@@ -604,6 +608,11 @@ func (e *Elasticsearch) getCatMaster(url string) (string, error) {
 		req.SetBasicAuth(e.Username, e.Password)
 	}
 
+	// Add custom headers
+	for key, value := range e.HttpHeaders {
+		req.Header.Add(key, value)
+	}
+
 	r, err := e.client.Do(req)
 	if err != nil {
 		return "", err
@@ -634,6 +643,11 @@ func (e *Elasticsearch) gatherJSONData(url string, v interface{}) error {
 
 	if e.Username != "" || e.Password != "" {
 		req.SetBasicAuth(e.Username, e.Password)
+	}
+
+	// Add custom headers
+	for key, value := range e.HttpHeaders {
+		req.Header.Add(key, value)
 	}
 
 	r, err := e.client.Do(req)

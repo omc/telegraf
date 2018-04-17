@@ -32,6 +32,9 @@ Note that specific statistics information can change between Elasticsearch versi
   ## Timeout for HTTP requests to the elastic search server(s)
   http_timeout = "5s"
 
+  ## HTTP headers to send with each request
+  http_headers = { "X-Custom-Header" = "Custom" }
+
   ## When local is true (the default), the node will read only its own stats.
   ## Set local to false when you want to read the node stats from all nodes
   ## of the cluster.
