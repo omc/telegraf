@@ -29,6 +29,9 @@ Note that specific statistics information can change between Elasticsearch versi
   ## servers = ["http://user:pass@localhost:9200"]
   servers = ["http://localhost:9200"]
 
+  ## HTTP headers to send with each request
+  http_headers = { "X-Custom-Header" = "Custom" }
+
   ## Timeout for HTTP requests to the elastic search server(s)
   http_timeout = "5s"
 
